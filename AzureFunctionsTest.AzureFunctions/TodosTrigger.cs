@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
@@ -29,7 +28,6 @@ namespace AzureFunctionsTest.AzureFunctions
 
         [FunctionName("GetAllTodos")]
         [OpenApiOperation(operationId: "GetAllTodos", tags: new[] { "Todos" })]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(IEnumerable<Todo>), Description = "The OK response")]
         public IActionResult GetAllTodos(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = Route)] 
@@ -45,7 +43,6 @@ namespace AzureFunctionsTest.AzureFunctions
 
         [FunctionName("GetTodoById")]
         [OpenApiOperation(operationId: "GetTodoById", tags: new[] { "Todos" })]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(Guid), Description = "Id of todo item")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Todo), Description = "The OK response")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.NoContent, contentType: "text/plain", bodyType: typeof(string), Description = "The NoContent response")]
@@ -64,7 +61,6 @@ namespace AzureFunctionsTest.AzureFunctions
 
         [FunctionName("AddTodo")]
         [OpenApiOperation(operationId: "AddTodo", tags: new[] { "Todos" })]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(AddTodoDto), Required = true, Description = "Todo item")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Todo), Description = "The OK response")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(MessageResponse), Description = "The BadRequest response", Summary = "Provide correct object")]
